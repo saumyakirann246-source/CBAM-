@@ -1,0 +1,6 @@
+{
+  "name": "CBAM Exporter Tracker",
+  "description": "Enterprise carbon accounting and EU CBAM compliance system of record for industrial exporters, managing cross-buyer declarations, verified emissions, and regulatory dispatch.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,230 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile with organization and role assignments",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Unique user ID matching auth.uid",
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "email": {
+          "type": "string",
+          "description": "User corporate email address"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Full name of compliance user"
+        },
+        "role": {
+          "type": "string",
+          "description": "Role in compliance team",
+          "enum": ["admin", "compliance_officer", "viewer"]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["userId", "email", "role"]
+    },
+    "Division": {
+      "title": "Division",
+      "description": "Industrial manufacturing plant or subsidiary division",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "name": {
+          "type": "string",
+          "description": "Facility name"
+        },
+        "country": {
+          "type": "string",
+          "description": "Country of installation"
+        },
+        "sector": {
+          "type": "string",
+          "enum": ["iron_steel", "aluminium", "cement", "fertiliser", "hydrogen", "electricity"]
+        },
+        "ownerId": {
+          "type": "string",
+          "description": "User ID of administrator"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["id", "name", "country", "sector", "ownerId"]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "Manufactured CBAM product",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "divisionId": {
+          "type": "string",
+          "description": "ID of manufacturing division"
+        },
+        "name": {
+          "type": "string",
+          "description": "Product title"
+        },
+        "sku": {
+          "type": "string",
+          "description": "Internal SKU or code"
+        },
+        "cnCode": {
+          "type": "string",
+          "description": "Combined Nomenclature code"
+        },
+        "sector": {
+          "type": "string",
+          "enum": ["iron_steel", "aluminium", "cement", "fertiliser", "hydrogen", "electricity"]
+        },
+        "productionRoute": {
+          "type": "string",
+          "description": "Technological route"
+        },
+        "specificDirectSEE": {
+          "type": "number",
+          "description": "Direct Specific Embedded Emissions (tCO2e/t)"
+        },
+        "specificIndirectSEE": {
+          "type": "number",
+          "description": "Indirect Specific Embedded Emissions (tCO2e/t)"
+        },
+        "totalEmbeddedSEE": {
+          "type": "number",
+          "description": "Total Specific Embedded Emissions (tCO2e/t)"
+        },
+        "ownerId": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["id", "divisionId", "name", "cnCode", "sector", "ownerId"]
+    },
+    "Buyer": {
+      "title": "Buyer",
+      "description": "EU Buyer counterparty",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "divisionId": {
+          "type": "string"
+        },
+        "companyName": {
+          "type": "string"
+        },
+        "eoriNumber": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active", "dormant", "new"]
+        },
+        "ownerId": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["id", "divisionId", "companyName", "ownerId"]
+    },
+    "EmissionsRecord": {
+      "title": "EmissionsRecord",
+      "description": "Periodic emissions and activity data entry",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "divisionId": {
+          "type": "string"
+        },
+        "productId": {
+          "type": "string"
+        },
+        "reportingPeriod": {
+          "type": "string"
+        },
+        "quantityProducedT": {
+          "type": "number"
+        },
+        "electricityConsumedMwh": {
+          "type": "number"
+        },
+        "naturalGasNm3": {
+          "type": "number"
+        },
+        "lightFuelOilT": {
+          "type": "number"
+        },
+        "directEmissionsT": {
+          "type": "number"
+        },
+        "indirectEmissionsT": {
+          "type": "number"
+        },
+        "totalEmbeddedEmissionsT": {
+          "type": "number"
+        },
+        "usesActualData": {
+          "type": "boolean"
+        },
+        "ownerId": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["id", "divisionId", "productId", "reportingPeriod", "quantityProducedT", "ownerId"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles and credentials"
+    },
+    "/divisions/{divisionId}": {
+      "schema": "Division",
+      "description": "Operating manufacturing facilities and divisions"
+    },
+    "/products/{productId}": {
+      "schema": "Product",
+      "description": "Manufactured products catalog"
+    },
+    "/buyers/{buyerId}": {
+      "schema": "Buyer",
+      "description": "Connected EU buyer relationships"
+    },
+    "/emissions/{emissionId}": {
+      "schema": "EmissionsRecord",
+      "description": "Monthly and quarterly activity emissions ledgers"
+    }
+  }
+}
